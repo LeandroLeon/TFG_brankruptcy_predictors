@@ -12,7 +12,7 @@ np.random.seed(42)
 
 
 def run_kmeans():
-    print_on_file(text='\n\n## K-MEANS Results ##')
+    print_on_file(text='\n## K-MEANS Results ##\n')
 
     X, Y = get_data()
     x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
@@ -39,7 +39,6 @@ def run_kmeans():
                                    'n_clusters': n_clusters,
                                    'silhouette_avg': silhouette_avg,
                                    'cluster_labels': cluster_labels})
-
 
     best_option = max(silhouette_results, key=lambda k: k['silhouette_avg'])
 
@@ -116,4 +115,5 @@ def run_kmeans():
                   "with n_clusters = %d" % best_option['n_clusters']),
                  fontsize=14, fontweight='bold')
 
+    plt.savefig('kmeans_plot.png')
     plt.show()
