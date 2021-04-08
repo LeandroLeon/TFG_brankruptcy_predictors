@@ -5,13 +5,11 @@ from sklearn.metrics import silhouette_score
 from sklearn.model_selection import train_test_split
 
 from custom_utils import print_on_file
-from data_handler import get_data
 
 
-def run_affinity_propagation():
+def run_affinity_propagation(X, Y):
     print_on_file(text='\n## Affinity Propagation Results ##\n')
 
-    X, Y = get_data()
     x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
 
     DAMPING_OPTIONS = [0.5, 0.75, 0.9, 0.99]

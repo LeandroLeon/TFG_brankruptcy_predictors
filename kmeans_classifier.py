@@ -5,16 +5,12 @@ from sklearn.metrics import silhouette_score, silhouette_samples
 import matplotlib.cm as cm
 from sklearn.model_selection import train_test_split
 from custom_utils import print_on_file
-
-from data_handler import get_data
-
 np.random.seed(42)
 
 
-def run_kmeans():
+def run_kmeans(X, Y):
     print_on_file(text='\n## K-MEANS Results ##\n')
 
-    X, Y = get_data()
     x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
 
     silhouette_results = []

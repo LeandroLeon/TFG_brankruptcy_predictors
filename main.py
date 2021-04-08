@@ -16,8 +16,8 @@ x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random
 
 # CLUSTERS
 
-run_kmeans()
-run_affinity_propagation()
+run_kmeans(X, Y)
+run_affinity_propagation(X, Y)
 
 # REGRESSION MODELS
 
@@ -57,4 +57,4 @@ for model in REGRESSION_MODELS:
         plt.savefig('rf_importances.png')
 
 # Neural Network + Genetic Algorithm
-run_ga()
+run_ga(X, Y)

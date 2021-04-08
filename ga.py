@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_validate, learning_curve, StratifiedKFold
+from sklearn.model_selection import cross_validate, learning_curve, StratifiedKFold, train_test_split
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 from random import randint
@@ -7,12 +7,8 @@ import random
 import matplotlib.pyplot as plt
 
 from custom_utils import print_on_file, format_scores
-from data_handler import get_data
 
 np.random.seed(42)
-
-X, Y = get_data()
-x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
 
 
 def population_initialization_mlp(size_mlp):
@@ -87,7 +83,9 @@ def ag_main(X_train, y_train, X_test, y_test, num_epochs=10, size_mlp=10, prob_m
 # Neural Network + Genetic Algorithm
 
 
-def run_ga():
+def run_ga(X, Y):
+    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+
     CV = StratifiedKFold(n_splits=10, shuffle=True)
     scoring = ['accuracy',
                'precision_weighted',
