@@ -1,5 +1,4 @@
 from sklearn import naive_bayes
-from sklearn.cluster import KMeans, AffinityPropagation
 from sklearn.ensemble import RandomForestClassifier, BaggingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
@@ -49,14 +48,11 @@ add_model_with_name(clf, 'Gaussian NB')
 clf = naive_bayes.ComplementNB()
 add_model_with_name(clf, 'Complement NB')
 
-# K-MEANS
-clf = KMeans(n_clusters=2, random_state=0)
-add_model_with_name(clf, 'K-Means')
 
 # Bagging Classifier
 clf = BaggingClassifier(base_estimator=RandomForestClassifier())
 add_model_with_name(clf, 'Ensemble Classifier')
 
 
-def get_models():
+def get_regression_models():
     return MODELS
