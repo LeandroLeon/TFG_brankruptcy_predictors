@@ -1,8 +1,18 @@
 import numpy as np
+from sklearn.model_selection import train_test_split, cross_validate, learning_curve, StratifiedKFold
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 from random import randint
 import random
+import matplotlib.pyplot as plt
+
+from custom_utils import print_on_file, format_scores
+from data_handler import get_data
+
+np.random.seed(42)
+
+X, Y = get_data()
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
 
 
 def population_initialization_mlp(size_mlp):
@@ -72,5 +82,37 @@ def ag_main(X_train, y_train, X_test, y_test, num_epochs=10, size_mlp=10, prob_m
         pop_fitness_sort = sort[0:size_mlp, :]
         best_individual = sort[0][1]
 
-
     return sort
+
+# Neural Network + Genetic Algorithm
+
+
+def run_ga():
+    CV = StratifiedKFold(n_splits=10, shuffle=True)
+    scoring = ['accuracy',
+               'precision_weighted',
+               'recall_weighted',
+               'f1_weighted']
+
+    best_result = ag_main(x_train, y_train, x_test, y_test, num_epochs=10, size_mlp=20, prob_mut=0.9)[0]
+    model = best_result[1]
+    scores = cross_validate(model, X, Y, scoring=scoring, cv=CV)
+    print_on_file(text='\nMODEL: Red Neuronal + Algortimo Genético')
+    print_on_file(text=format_scores(scores))
+
+    fig, ax = plt.subplots()
+
+    train_sizes, train_scores, test_scores = \
+        learning_curve(model, x_train, y_train, cv=None, n_jobs=None,
+                       train_sizes=np.linspace(.1, 1.0, 5))
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+
+    ax.set(xlabel='Training examples', ylabel='Score',
+           title='Red Neuronal + Algoritmo Genético')
+    ax.grid()
+    ax.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score")
+    plt.savefig('ann_ga_accuracy.png')
+    plt.show()
