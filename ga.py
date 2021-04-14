@@ -111,6 +111,7 @@ def run_ga(X, Y):
     ax.set(xlabel='Training examples', ylabel='Score',
            title='Red Neuronal + Algoritmo Genético')
     ax.grid()
-    ax.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score")
-    plt.savefig('ann_ga_accuracy.png')
+    ax.plot(train_sizes, train_scores_mean, 'o-', color="b", label="Cross-validation score Train")
+    ax.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score Test")
+    plt.savefig('ann_ga_learning_curve.png')
     plt.show()
