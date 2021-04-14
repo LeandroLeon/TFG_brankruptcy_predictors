@@ -22,7 +22,7 @@ add_model_with_name(clf, 'Logistic Regression')
 
 # RANDOM FOREST
 clf = RandomForestClassifier()
-add_model_with_name(clf, 'Radom Forest')
+add_model_with_name(clf, 'Random Forest')
 
 SVM_KERNELS = ['linear', 'poly', 'rbf', 'sigmoid']
 SVC_GAMMAS = ['scale', 'auto']
