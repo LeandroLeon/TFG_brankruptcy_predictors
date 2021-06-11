@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.model_selection import cross_validate, learning_curve, StratifiedKFold, train_test_split
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, make_scorer, recall_score, f1_score, precision_score
 from random import randint
 import random
 import matplotlib.pyplot as plt
@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from custom_utils import print_on_file, format_scores
 
 np.random.seed(42)
+FILENAME = 'ga.txt'
 
 
 def population_initialization_mlp(size_mlp):
@@ -84,20 +85,22 @@ def ag_main(X_train, y_train, X_test, y_test, num_epochs=10, size_mlp=10, prob_m
 
 
 def run_ga(X, Y):
-    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.15, random_state=42)
 
-    CV = StratifiedKFold(n_splits=10, shuffle=True)
-    scoring = ['accuracy',
-               'precision_weighted',
-               'recall_weighted',
-               'f1_weighted']
+    CV = StratifiedKFold(n_splits=5, shuffle=True)
+    scoring = {'accuracy': 'accuracy',
+               'precision': 'precision',
+               'recall': 'recall',
+               'specificity': make_scorer(recall_score, pos_label=0),
+               'f1_score': 'f1'}
 
     best_result = ag_main(x_train, y_train, x_test, y_test, num_epochs=10, size_mlp=20, prob_mut=0.9)[0]
     model = best_result[1]
     scores = cross_validate(model, X, Y, scoring=scoring, cv=CV)
-    print_on_file(text='\nMODEL: Red Neuronal + Algortimo Genético')
-    print_on_file(text=format_scores(scores))
+    print_on_file(text='\nMODEL: Red Neuronal + Algortimo Genético', filename=FILENAME)
+    print_on_file(text=format_scores(scores), filename=FILENAME)
 
+    plt.figure(figsize=(20, 8))
     fig, ax = plt.subplots()
 
     train_sizes, train_scores, test_scores = \

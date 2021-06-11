@@ -10,9 +10,9 @@ from custom_utils import print_on_file
 def run_affinity_propagation(X, Y):
     print_on_file(text='\n## Affinity Propagation Results ##\n')
 
-    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.33)
 
-    DAMPING_OPTIONS = [0.5, 0.75, 0.9, 0.99]
+    DAMPING_OPTIONS = [0.75, 0.9, 0.99]
     results = []
 
     for damping in DAMPING_OPTIONS:
@@ -23,9 +23,9 @@ def run_affinity_propagation(X, Y):
         n_clusters_ = len(cluster_centers_indices)
         labels = model.labels_
 
-        P = model.predict(x_train)
+        P = model.predict(x_test)
 
-        silhouette_avg = silhouette_score(x_train, P)
+        silhouette_avg = silhouette_score(x_test, P)
         results.append({'damping': damping,
                         'silhouette_avg': silhouette_avg,
                         'n_clusters_': n_clusters_,
@@ -35,10 +35,10 @@ def run_affinity_propagation(X, Y):
                                                                                                       silhouette_avg))
 
     best_option = max(results, key=lambda k: k['silhouette_avg'])
-
+    plt.figure(figsize=(20, 8))
     plt.plot()
     colors = cm.nipy_spectral(P.astype(float) / best_option['n_clusters_'])
-    plt.scatter(x_train[:, 0], x_train[:, 1], marker='.', s=30, lw=0, alpha=0.7,
+    plt.scatter(x_test[:, 0], x_test[:, 1], marker='.', s=30, lw=0, alpha=0.7,
                 c=colors, edgecolor='k')
 
     # Labeling the clusters
@@ -52,6 +52,4 @@ def run_affinity_propagation(X, Y):
                     s=50, edgecolor='k')
 
     plt.title("\nNª de clusters estimados: {} con damping = {}".format(best_option['n_clusters_'], best_option['damping']))
-
     plt.savefig('ap_plot.png')
-    plt.show()

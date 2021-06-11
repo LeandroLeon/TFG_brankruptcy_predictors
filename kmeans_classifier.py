@@ -5,6 +5,7 @@ from sklearn.metrics import silhouette_score, silhouette_samples
 import matplotlib.cm as cm
 from sklearn.model_selection import train_test_split
 from custom_utils import print_on_file
+
 np.random.seed(42)
 
 
@@ -25,10 +26,9 @@ def run_kmeans(X, Y):
         # The silhouette_score gives the average value for all the samples.
         # This gives a perspective into the density and separation of the formed
         # clusters
-        silhouette_avg = silhouette_score(x_train, cluster_labels)
+        silhouette_avg = silhouette_score(x_test, clusterer.predict(x_test))
 
         printable_text = "For n_clusters = " + str(n_clusters) + " || The average silhouette_score is :" + str(silhouette_avg)
-        print(printable_text)
         print_on_file(text=printable_text)
 
         silhouette_results.append({'clusterer': clusterer,
@@ -42,7 +42,7 @@ def run_kmeans(X, Y):
 
     # Create a subplot with 1 row and 2 columns
     fig, (ax1, ax2) = plt.subplots(1, 2)
-    fig.set_size_inches(18, 7)
+    fig.set_size_inches(20, 8)
 
     # The 1st subplot is the silhouette plot
     # The silhouette coefficient can range from -1, 1 but in this example all
@@ -110,6 +110,5 @@ def run_kmeans(X, Y):
     plt.suptitle(("Silhouette analysis for KMeans clustering on sample data "
                   "with n_clusters = %d" % best_option['n_clusters']),
                  fontsize=14, fontweight='bold')
-
     plt.savefig('kmeans_plot.png')
     plt.show()
